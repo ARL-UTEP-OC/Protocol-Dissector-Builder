@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 '''
-Author: Ernesto Vazquez 
+Author: Ernesto Vazquez
 Dialog to browse files to open a project
 '''
 
@@ -48,11 +48,15 @@ class Ui_Dialog(object):
         '''
         Open the selected project
         '''
-        title = "Please select Project"
-        directory = "./"
-        #Look for files with pdbproj extension only
-        ftype = "JSON files (*.pdbproj)"
-        dialog = QtWidgets.QFileDialog(None, title, directory, ftype)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
-            self.filename = str(dialog.selectedFiles()[0])
-            self.linePathEdit.setText(self.filename)
+        try:
+            title = "Please select Project"
+            directory = "./"
+            #Look for files with pdbproj extension only
+            ftype = "JSON files (*.pdbproj)"
+            dialog = QtWidgets.QFileDialog(None, title, directory, ftype)
+            if dialog.exec_() == QtWidgets.QDialog.Accepted:
+                self.filename = str(dialog.selectedFiles()[0])
+                self.linePathEdit.setText(self.filename)
+        except Exception as e:
+            print(str(e))
+            print("Here we go")

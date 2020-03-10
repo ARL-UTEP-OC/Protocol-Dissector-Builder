@@ -33,14 +33,18 @@ class Loader():
         save workspace information
         get JSON from current workspace and update json file
         '''
-        JSON = self.workspace.get_json()
-        print(JSON)
-        #Save workspace in .pdbws extension
-        path = self.workspace.wpath.strip()
-        name = self.workspace.name.strip()
-        _file = open("{}/{}.pdbws".format(path, name), "w+")
-        _file.write(json.dumps(JSON, indent=4))
-        _file.close()
+        try:
+            JSON = self.workspace.get_json()
+            print(JSON)
+            #Save workspace in .pdbws extension
+            path = self.workspace.wpath.strip()
+            name = self.workspace.name.strip()
+            _file = open("{}/{}.pdbws".format(path, name), "w+")
+            _file.write(json.dumps(JSON, indent=4))
+            _file.close()
+        except Exception as e:
+            print("Saving the workspace resulted in an error. Traceback: ")
+            print(str(e))
 
     def load_workspace(self, filename):
         '''
@@ -51,11 +55,15 @@ class Loader():
         Yields:
             Name of the loaded workspace
         '''
-        print("[+] Opening Workspace from {}".format(filename))
-        with open(filename) as _file:
-            data = json.loads(_file.read())
-        self.workspace = workspace.Workspace(JSON=data)
-        return self.workspace.JSON
+        try:
+            print("[+] Opening Workspace from {}".format(filename))
+            with open(filename) as _file:
+                data = json.loads(_file.read())
+            self.workspace = workspace.Workspace(JSON=data)
+            return self.workspace.JSON
+        except Exception as e:
+            print("Loading the workspace resulted in an error. Traceback: ")
+            print(str(e))
 
     def new_workspace(self, ws_name, ws_created, ws_edited):
         '''
@@ -69,16 +77,21 @@ class Loader():
             Path to newly created workspace file
         '''
         #store workspace reference
-        self.workspace = workspace.Workspace(ws_name.strip(), None)
-        self.workspace.start_date = ws_created
-        self.workspace.edit_date = ws_edited
-        self.workspace.wpath = "{}/{}".format(os.getcwd().strip(), self.workspace.name.strip())
-        #Create directories needed by thhe workspace
-        os.mkdir(self.workspace.name.strip())
-        os.mkdir("{}/Lua".format(self.workspace.wpath))
-        #Save the workspace
-        self.save_workspace()
-        return self.workspace.wpath
+        try:
+            self.workspace = workspace.Workspace(ws_name.strip(), None)
+            self.workspace.start_date = ws_created
+            self.workspace.edit_date = ws_edited
+            self.workspace.wpath = "{}/{}".format(os.getcwd().strip(), self.workspace.name.strip())
+            #Create directories needed by thhe workspace
+            os.mkdir(self.workspace.name.strip())
+            os.mkdir("{}/Lua".format(self.workspace.wpath))
+            #Save the workspace
+            self.save_workspace()
+            return self.workspace.wpath
+        except Exception as e:
+            print("Creating the workspace resulted in an error. Traceback: ")
+            print(str(e))
+
 
     def close_workspace(self):
         '''
@@ -138,13 +151,16 @@ class Loader():
         Args:
             filename : path to file of project to be imported
         '''
-        with open(filename) as _file:
-            data = json.loads(_file.read())
-        #Create .pdbproj file in current workspace, add to project and save
-        proj = project.Project(JSON=data)
-        proj.path = "{}/{}.pdbproj".format(self.workspace.wpath, proj.name)
-        self.workspace.add_project_to_workspace(proj.path)
-        self.save_project(proj.path, proj)
+        try:
+            with open(filename) as _file:
+                data = json.loads(_file.read())
+            #Create .pdbproj file in current workspace, add to project and save
+            proj = project.Project(JSON=data)
+            proj.path = "{}/{}.pdbproj".format(self.workspace.wpath, proj.name)
+            self.workspace.add_project_to_workspace(proj.path)
+            self.save_project(proj.path, proj)
+        except Exception as e:
+            print("There is an issue importing the project")
 
     def save_dissector_attributes(self, fields, workspace, p_name):
         '''

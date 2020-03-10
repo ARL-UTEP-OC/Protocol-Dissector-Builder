@@ -72,7 +72,7 @@ class P_Dialog(object):
         self.lineEdit_5.setToolTip("Name given to the subtree created for the dissected data")
         self.lineEdit_6.setToolTip("Port Number for source of packets")
         self.lineEdit_7.setToolTip("Port Number for destination of packets")
-        
+
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept)
         self.buttonBox.rejected.connect(Dialog.reject)
@@ -89,4 +89,3 @@ class P_Dialog(object):
         self.label_6.setText(_translate("Dialog", "Source Port"))
         self.label_7.setText(_translate("Dialog", "Destination Port"))
         self.lineEdit_7.setText(_translate("Dialog", "-1"))
-

@@ -6,7 +6,7 @@ sys.path.insert(1, "../../")
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 '''
-Author: Ernesto Vazquez 
+Author: Ernesto Vazquez
 Dialog to browse files to open a workspace
 '''
 
@@ -38,20 +38,21 @@ class Ui_OpenWorkspaceDialog(object):
         '''
         Open the selected workspace file
         '''
-        title = "Please select Workspace"
-        directory = "./"
-        #Look for files with pdbws extension only
-        ftype = "JSON files (*.pdbws)"
-        dialog = QtWidgets.QFileDialog(None, title, directory, ftype)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
-            self.filename = str(dialog.selectedFiles()[0])
-            print(self.filename)
-            self.linePath.setText(self.filename)
+        try:
+            title = "Please select Workspace"
+            directory = "./"
+            #Look for files with pdbws extension only
+            ftype = "JSON files (*.pdbws)"
+            dialog = QtWidgets.QFileDialog(None, title, directory, ftype)
+            if dialog.exec_() == QtWidgets.QDialog.Accepted:
+                self.filename = str(dialog.selectedFiles()[0])
+                print(self.filename)
+                self.linePath.setText(self.filename)
+        except:
+            print("Fix")
 
     def retranslateUi(self, OpenWorkspaceDialog):
         _translate = QtCore.QCoreApplication.translate
         self.label.setText(_translate("OpenWorkspaceDialog", "Create a New Workspace / Open New Workspace"))
         self.browseButton.setText(_translate("OpenWorkspaceDialog", "Browse"))
         self.addButton.setStandardButtons(QtWidgets.QDialogButtonBox.Ok)
-        
-

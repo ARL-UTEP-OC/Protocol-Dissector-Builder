@@ -36,11 +36,11 @@ class UiMainWindow(object):
     dba_pool = [] #DBA pool
     MAX_PROJECTS = 10 #Max projects to displau
     parent_vlayout = None #main layout
-    workspace_label_hlayout = None #workspace label layout 
+    workspace_label_hlayout = None #workspace label layout
     projectView_canvas_hlayout = None #canvas layout
     packetPreview_hlayout = None #packet preview layout
     log_parent_vlayout = None #log layout
-    log_hlayout = None 
+    log_hlayout = None
     project_canvas_splitter = None #project canvas splitter
     packetpreview_splitter = None #packet preview splitter
     packetpreview_log_splitter = None#splitter between packet preview and log
@@ -220,7 +220,7 @@ class UiMainWindow(object):
         openWorkspaceUi.setupUi(dialog)
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
             #set workspace file
-            self.workspace_file = openWorkspaceUi.filename   
+            self.workspace_file = openWorkspaceUi.filename
             ws_name = self.loadWorkspace()
             self.workspaceLabel.setText("Worspace: " + ws_name)
             logging.info(f"Workspace: {ws_name} opened")
@@ -304,7 +304,7 @@ class UiMainWindow(object):
             #send signal to pyro
             self.closeWorkspace()
 
-  
+
     def export_lua_dialog(self):
         '''
         Dialog to confirm export luad
@@ -317,7 +317,7 @@ class UiMainWindow(object):
             self.save_all_dissector()
             self.export_lua_script()
 
-    
+
 
     def openProjectConfigDialog(self, pname=None, pauthor=None, pdesc=None,
                                 created=datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S"),
@@ -328,7 +328,7 @@ class UiMainWindow(object):
         '''
         Open workspace config dialog
 
-        Args: 
+        Args:
             wsName : name of workspace
         '''
         wsStartDate = None
@@ -341,7 +341,7 @@ class UiMainWindow(object):
                 wsName = wsdata['name']
                 wsStartDate = wsdata['created']
                 wsEditDate = wsdata['edited']
-        finally:   
+        finally:
             #populate UI
             if wsName is None or wsName is False:
                     wsName = " "
@@ -353,7 +353,7 @@ class UiMainWindow(object):
             wcUi = workspaceconfigwindow.Ui_Dialog()
             wcUi.setupUi(dialog)
             wcUi.workspaceFileLineEdit.setText(str(wsName))
-            
+
             if dialog.exec_() == QtWidgets.QDialog.Accepted:
                 if wcUi.workspaceFileLineEdit.text() != wsName:
                     wsName = wcUi.workspaceFileLineEdit.text()
@@ -361,31 +361,35 @@ class UiMainWindow(object):
                     self.workspace_file ="{}/{}.pdbws".format(self.pyro_proxy.new_workspace(wsName,wsStartDate,wsEditDate),wsName.strip())
                     self.workspaceLabel.setText("Workspace: " + wsName)
                     self.loadWorkspace()
- 
+
     #PROJECT FUNCTIONS
     def export_lua_script(self):
         '''
         export lua script
         '''
         #send signal to pyro
-        self.pyro_proxy.export_lua_script(self.workspace_file,self.selected_project)
-        logging.info(f"Lua file exported into ./LUA/{self.selected_project}.lua")
-        self.showExportdialog()
+        try:
+            self.pyro_proxy.export_lua_script(self.workspace_file,self.selected_project)
+            logging.info(f"Lua file exported into ./LUA/{self.selected_project}.lua")
+            self.showExportdialog()
+        except Exception as e:
+            print("Error exporting lua script. Traceback: ")
+            print(str(e))
 
     def showExportdialog(self):
         '''
         Dialog to confirm lua was exported
-        ''' 
+        '''
         msg = QtWidgets.QMessageBox()
         msg.setIcon(QtWidgets.QMessageBox.Information)
         msg.setInformativeText(f"Lua file exported into {self.workspace_file}/LUA/{self.selected_project}.lua")
         msg.setWindowTitle("LUA Export")
         msg.exec_()
-       
+
     def openProjectConfigDialog(self,pname=None,pauthor = None,pdesc=None,created=datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S"), edited=datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")):
         '''
         Dialog to set project settings
-        ''' 
+        '''
         #Populate UI
         dialog = QtWidgets.QDialog()
         pUi = projectconfig.P_Dialog()
@@ -395,7 +399,7 @@ class UiMainWindow(object):
         pUi.lineEdit.setText(pname)
         pUi.lineEdit_2.setText(pauthor)
         pUi.lineEdit_3.setText(pdesc)
-       
+
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
             if pUi.lineEdit.text() != pname:
                 pname = pUi.lineEdit.text()
@@ -423,20 +427,24 @@ class UiMainWindow(object):
         msgBox.setWindowTitle("Error")
         msgBox.exec_()
 
-  
-  
+
+
     def openProjectDialog(self):
         '''
         Import project dialog
         '''
         #Open file browser
-        dialog = QtWidgets.QDialog()
-        opUi = openprojectwindow.Ui_Dialog()
-        opUi.setupUi(dialog)
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
-            #send signal to pyro
-            self.pyro_proxy.import_project(opUi.filename)
-            self.loadWorkspace()
+        try:
+            dialog = QtWidgets.QDialog()
+            opUi = openprojectwindow.Ui_Dialog()
+            opUi.setupUi(dialog)
+            if dialog.exec_() == QtWidgets.QDialog.Accepted:
+                #send signal to pyro
+                self.pyro_proxy.import_project(opUi.filename)
+                self.loadWorkspace()
+        except Exception as e:
+            print("There was an error importing the project. ")
+            logging.info("There was an error importing the project. ")
 
     def createProjectTreeViewModel(self, treeView):
         '''
@@ -453,7 +461,7 @@ class UiMainWindow(object):
         #insert always on top
         model.insertRow(0)
         model.setData(model.index(0, 0), project_name)
-        
+
     def clearProjectTreview(self):
         '''
         Clear projects from treeview
@@ -482,8 +490,12 @@ class UiMainWindow(object):
         '''
         Save canvas area
         '''
-        #get dissector fields from canvas
-        dissector_json = self.dba_ui.save_button_clicked()
-        #Send data to pyro
-        self.pyro_proxy.save_dissector_attributes(dissector_json,self.workspace_file,self.selected_project)
-        logging.info(f"Canvas area saved into project file")
+        try:
+            #get dissector fields from canvas
+            dissector_json = self.dba_ui.save_button_clicked()
+            #Send data to pyro
+            self.pyro_proxy.save_dissector_attributes(dissector_json,self.workspace_file,self.selected_project)
+            logging.info(f"Canvas area saved into project file")
+        except Exception as e:
+            print("Error exporting lua script. Traceback: ")
+            print(str(e))

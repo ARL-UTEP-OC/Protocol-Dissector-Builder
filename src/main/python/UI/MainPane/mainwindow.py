@@ -221,9 +221,13 @@ class UiMainWindow(object):
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
             #set workspace file
             self.workspace_file = openWorkspaceUi.filename
+            ws_name = ""
             ws_name = self.loadWorkspace()
-            self.workspaceLabel.setText("Worspace: " + ws_name)
-            logging.info(f"Workspace: {ws_name} opened")
+            if ws_name != "":
+                self.workspaceLabel.setText("Workspace: " + ws_name)
+                logging.info(f"Workspace: {ws_name} opened")
+            else:
+                logging.info(f"Workspace was not loaded correctly")
 
     def saveWorkspace(self, wsname):
         '''
@@ -373,8 +377,13 @@ class UiMainWindow(object):
             logging.info(f"Lua file exported into ./LUA/{self.selected_project}.lua")
             self.showExportdialog()
         except Exception as e:
-            print("Error exporting lua script. Traceback: ")
-            print(str(e))
+            if hasattr(self,'selected_project'):
+                print("Error exporting lua script. Traceback: ")
+                print(str(e))
+            else:
+                print("Error exporting lua script. Area is empty.")
+                logging.info(f"Error exporting lua script. Area is empty.")
+                
 
     def showExportdialog(self):
         '''
@@ -497,5 +506,9 @@ class UiMainWindow(object):
             self.pyro_proxy.save_dissector_attributes(dissector_json,self.workspace_file,self.selected_project)
             logging.info(f"Canvas area saved into project file")
         except Exception as e:
-            print("Error exporting lua script. Traceback: ")
-            print(str(e))
+            if hasattr(self,'selected_project'):
+                print("Error exporting lua script. Traceback: ")
+                print(str(e))
+            else:
+                print("Error exporting lua script. Area is empty.")
+                logging.info(f"Error exporting lua script. Area is empty.")

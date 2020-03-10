@@ -59,4 +59,3 @@ class Ui_Dialog(object):
                 self.linePathEdit.setText(self.filename)
         except Exception as e:
             print(str(e))
-            print("Here we go")

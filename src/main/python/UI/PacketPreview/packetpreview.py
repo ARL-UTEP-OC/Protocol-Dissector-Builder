@@ -113,8 +113,12 @@ class Ui_PackagePreview(object):
 
     def dissect(self):
         logging.info("Dissecting")
-        p = subprocess.Popen(['python', f'{os.getcwd()}/demo.py'])
+        if(not hasattr(self,'name')):
+            print("No file to dissect")
+            logging.info("No file to dissect")
+            return
         try:
+            p = subprocess.Popen(['python', f'{os.getcwd()}/demo.py'])
             if(self.name[0] and ".pcap" in self.name[0] ):
                 self.model.removeRows(0,self.model.rowCount())
                 self.pushButton2.setText("ReDissect")
@@ -175,10 +179,10 @@ class Ui_PackagePreview(object):
                     self.model.appendRow([branch2,numberCol])
                     numberCol.setData(QBrush(color), QtCore.Qt.BackgroundRole)
                 self.label_3.setText("Status: Package has been dissected.")
+                logging.info("Dissected")
         except:
                 pass
         p.terminate()
-        logging.info("Dissected")
 
 
     def retranslateUi(self, PackagePreview):

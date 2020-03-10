@@ -220,10 +220,15 @@ class UiMainWindow(object):
         openWorkspaceUi.setupUi(dialog)
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
             #set workspace file
-            self.workspace_file = openWorkspaceUi.filename
+            try:
+                self.workspace_file = openWorkspaceUi.filename
+            except:
+                print("Workspace does not exist")
+                logging.info(f"Workspace was not loaded correctly. It does not exist")
+
             ws_name = ""
             ws_name = self.loadWorkspace()
-            if ws_name != "":
+            if ws_name != "" and ws_name != None:
                 self.workspaceLabel.setText("Workspace: " + ws_name)
                 logging.info(f"Workspace: {ws_name} opened")
             else:
@@ -383,7 +388,7 @@ class UiMainWindow(object):
             else:
                 print("Error exporting lua script. Area is empty.")
                 logging.info(f"Error exporting lua script. Area is empty.")
-                
+
 
     def showExportdialog(self):
         '''

@@ -77,6 +77,7 @@ class DropGraphicsScene(QGraphicsScene):
                 if action == delete_action:
                     for item in self.items(event.scenePos()):
                         if item.scene():
+                            print(type(item))
                             item.removeConnectors()
                             i = 0
                             while (i < len(self.proxyWidgetList)):
@@ -97,6 +98,12 @@ class DropGraphicsScene(QGraphicsScene):
                                 if(isinstance(self.getDefaultWidget(item), Variable)):
                                     # If there's no other occurrences of the deleted field or variable then it going to be removed from the list of defined variable or field
                                     if(self.countOccurrences(item) == 0):
+                                        for i in self.variableList:
+                                            print(i)
+
+                                        print("WASSAAAAA")
+
+                                        print(item.widget().menu().actions()[0].defaultWidget().nameLineEdit.text())
                                         self.variableList.remove(item.widget().menu().actions()[0].defaultWidget().nameLineEdit.text())
                                     self.variable_count -= 1
                                     i = 0
@@ -420,6 +427,7 @@ class DropGraphicsScene(QGraphicsScene):
 
 
             widgetPosition = QPointF(dissector[key]["Position"]["x"], dissector[key]["Position"]["y"])
+            proxy = QGraphicsProxyWidget
             proxy = self.addWidgetToScene(widgetToAdd, widgetPosition, widgetText)
 
             proxy.setPolygon()
@@ -427,7 +435,7 @@ class DropGraphicsScene(QGraphicsScene):
             if(widgetType == "Field"):
                 self.proxyDefinedFieldList.append(proxy)
             elif(widgetType == "Variable"):
-                self.variableList.append(proxy)
+                self.variableList.append(widgetToAdd.name)
 
             nameToProxyDict.update({key: proxy})
 
@@ -471,6 +479,10 @@ class DropGraphicsScene(QGraphicsScene):
     def restoreConnectorsToScene(self, connectionsDict):
         for startItem, endItem in connectionsDict.items():
             # if there is more than one endItem (false,true)
+            try:
+                print(endItem)
+            except:
+                pass
             if(type(endItem) is dict):
                 for path, innerEndItem in endItem.items():
                     connector = Connector(startItem, innerEndItem)

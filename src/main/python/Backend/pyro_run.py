@@ -146,6 +146,7 @@ class Pyro_Run():
             try:
                 self.child = pexpect.spawn("python3.6 " + projectPath,encoding='utf-8')
             except:
+                print("Python 3.6 was not found, please fix path or install python 3.6")
                 self.child = pexpect.spawn("python " + projectPath,encoding='utf-8')
 
             print("created")

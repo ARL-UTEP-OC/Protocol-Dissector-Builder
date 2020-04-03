@@ -98,12 +98,6 @@ class DropGraphicsScene(QGraphicsScene):
                                 if(isinstance(self.getDefaultWidget(item), Variable)):
                                     # If there's no other occurrences of the deleted field or variable then it going to be removed from the list of defined variable or field
                                     if(self.countOccurrences(item) == 0):
-                                        for i in self.variableList:
-                                            print(i)
-
-                                        print("WASSAAAAA")
-
-                                        print(item.widget().menu().actions()[0].defaultWidget().nameLineEdit.text())
                                         self.variableList.remove(item.widget().menu().actions()[0].defaultWidget().nameLineEdit.text())
                                     self.variable_count -= 1
                                     i = 0
@@ -113,6 +107,8 @@ class DropGraphicsScene(QGraphicsScene):
                                             i += 1
                                 elif(isinstance(self.getDefaultWidget(item), Field)):
                                      if(self.countOccurrences(item) == 0):
+                                        print(self.proxyDefinedFieldList)
+                                        print(item.widget().menu().actions()[0].defaultWidget().table.cellWidget(0,1).text())
                                         self.proxyDefinedFieldList.remove(item.widget().menu().actions()[0].defaultWidget().table.cellWidget(0,1).text())
                             self.removeItem(item)
 
@@ -433,7 +429,7 @@ class DropGraphicsScene(QGraphicsScene):
             proxy.setPolygon()
             self.proxyWidgetList.append(proxy)
             if(widgetType == "Field"):
-                self.proxyDefinedFieldList.append(proxy)
+                self.proxyDefinedFieldList.append(widgetToAdd.name)
             elif(widgetType == "Variable"):
                 self.variableList.append(widgetToAdd.name)
 

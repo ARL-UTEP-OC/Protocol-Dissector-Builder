@@ -77,8 +77,11 @@ class DropGraphicsScene(QGraphicsScene):
                 if action == delete_action:
                     for item in self.items(event.scenePos()):
                         if item.scene():
-                            print(type(item))
-                            item.removeConnectors()
+                            print("context menu event" + str(type(item)))
+                            try:
+                                item.removeConnectors()
+                            except:
+                                pass
                             i = 0
                             while (i < len(self.proxyWidgetList)):
                                 if(isinstance(self.getDefaultWidget(item), Variable) or isinstance(self.getDefaultWidget(item), Field)):
@@ -107,8 +110,8 @@ class DropGraphicsScene(QGraphicsScene):
                                             i += 1
                                 elif(isinstance(self.getDefaultWidget(item), Field)):
                                      if(self.countOccurrences(item) == 0):
-                                        print(self.proxyDefinedFieldList)
-                                        print(item.widget().menu().actions()[0].defaultWidget().table.cellWidget(0,1).text())
+                                        # print(self.proxyDefinedFieldList)
+                                        # print(item.widget().menu().actions()[0].defaultWidget().table.cellWidget(0,1).text())
                                         self.proxyDefinedFieldList.remove(item.widget().menu().actions()[0].defaultWidget().table.cellWidget(0,1).text())
                             self.removeItem(item)
 
@@ -238,6 +241,8 @@ class DropGraphicsScene(QGraphicsScene):
     def addWidgetToScene(self, widget, pos, text):
 
         button = None
+        print(type(widget))
+        print("-----------------------------------")
         if(text != "End Loop" and text != "do"):
             if(not(isinstance(widget, Field))):
                 if(isinstance(widget, Variable)):

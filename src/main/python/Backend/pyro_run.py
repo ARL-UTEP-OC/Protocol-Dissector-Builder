@@ -143,7 +143,11 @@ class Pyro_Run():
             self.child = winpexpect.winspawn("python " + '"' + projectPath + '"')
             print("created - w " )
         else:
-            self.child = pexpect.spawn("python3.6 " + projectPath,encoding='utf-8')
+            try:
+                self.child = pexpect.spawn("python3.6 " + projectPath,encoding='utf-8')
+            except:
+                self.child = pexpect.spawn("python " + projectPath,encoding='utf-8')
+
             print("created")
         self.child.expect("loop")
         print("Creating")

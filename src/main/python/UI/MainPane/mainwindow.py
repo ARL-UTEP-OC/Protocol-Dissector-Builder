@@ -175,6 +175,14 @@ class UiMainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuAbout.menuAction())
+        #About options
+        self.openAbout = QtWidgets.QAction("About this app", self.menubar)
+        self.openAbout.triggered.connect(self.showAboutdialog)
+        self.menuAbout.addActions([self.openAbout])
+        #Edit options
+        self.openEdit = QtWidgets.QAction("Reserved for later use.", self.menubar)
+        self.openEdit.triggered.connect(self.showReserveddialog)
+        self.menuEdit.addActions([self.openEdit])
         #Workspace Options
         self.new_ws = QtWidgets.QAction("New Workspace", self.menubar)
         self.open_ws = QtWidgets.QAction("Open Workspace",self.menubar)
@@ -399,6 +407,24 @@ class UiMainWindow(object):
         msg.setInformativeText(f"Lua file exported into {self.workspace_file}/LUA/{self.selected_project}.lua")
         msg.setWindowTitle("LUA Export")
         msg.exec_()
+
+    def showReserveddialog(self):
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setInformativeText(f"This tab is reserved for future use.")
+        msg.setWindowTitle("Reserved for future use")
+        msg.exec_()
+
+    def showAboutdialog(self):
+        '''
+        Show about popup
+        '''
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setInformativeText(f"This project was developed by the CyberRIG in collaboration with the Army Research Lab")
+        msg.setWindowTitle("About Network Protocol Generator")
+        msg.exec_()
+
 
     def openProjectConfigDialog(self,pname=None,pauthor = None,pdesc=None,created=datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S"), edited=datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")):
         '''

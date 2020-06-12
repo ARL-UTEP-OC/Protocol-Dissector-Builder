@@ -321,6 +321,9 @@ class UiMainWindow(object):
             #send signal to pyro
             self.closeWorkspace()
         self.packetpreview_ui.disableDissectButton()
+        self.packetpreview_ui.disableFileButton()
+
+        self.dba_ui.disableToolBox()
 
 
     def export_lua_dialog(self):
@@ -484,6 +487,9 @@ class UiMainWindow(object):
                 self.pyro_proxy.import_project(opUi.filename)
                 self.loadWorkspace()
                 self.packetpreview_ui.enableDissectButton()
+                self.packetpreview_ui.enableFileButton()
+
+                self.dba_ui.enableToolBox()
 
         except Exception as e:
             print("There was an error importing the project. ")
@@ -529,6 +535,8 @@ class UiMainWindow(object):
         self.dba_ui.restore_widgets_to_scene(dissector_json)
         logging.info(f"Project: {self.selected_project} opened")
         self.packetpreview_ui.enableDissectButton()
+        self.packetpreview_ui.enableFileButton()
+        self.dba_ui.enableToolBox()
 
     def save_all_dissector(self):
         '''

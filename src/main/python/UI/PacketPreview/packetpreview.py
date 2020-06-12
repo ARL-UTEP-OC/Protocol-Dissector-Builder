@@ -46,6 +46,7 @@ class Ui_PackagePreview(object):
         self.pushButton.setGeometry(QtCore.QRect(0, 0, 83, 25))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.openFile)
+        self.pushButton.setEnabled(False)
 
         self.label_3 = QtWidgets.QLabel(PackagePreview)
         self.label_3.setGeometry(QtCore.QRect(300, 30, 500, 17))
@@ -194,6 +195,12 @@ class Ui_PackagePreview(object):
 
     def disableDissectButton(self):
         self.pushButton2.setEnabled(False)
+
+    def enableFileButton(self):
+        self.pushButton.setEnabled(True)
+
+    def disableFileButton(self):
+        self.pushButton.setEnabled(False)
 
     def retranslateUi(self, PackagePreview):
         _translate = QtCore.QCoreApplication.translate

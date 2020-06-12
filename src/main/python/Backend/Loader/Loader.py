@@ -2,9 +2,12 @@
 Authors:
     Daniel Ornelas
     Ernesto Vazquez
+    Fernando Martinez
 """
 import os
 import json
+import subprocess
+import platform
 import sys
 sys.path.insert(1, "./")
 sys.path.insert(1, "../../")
@@ -33,18 +36,14 @@ class Loader():
         save workspace information
         get JSON from current workspace and update json file
         '''
-        try:
-            JSON = self.workspace.get_json()
-            print(JSON)
-            #Save workspace in .pdbws extension
-            path = self.workspace.wpath.strip()
-            name = self.workspace.name.strip()
-            _file = open("{}/{}.pdbws".format(path, name), "w+")
-            _file.write(json.dumps(JSON, indent=4))
-            _file.close()
-        except Exception as e:
-            print("Saving the workspace resulted in an error. Traceback: ")
-            print(str(e))
+        JSON = self.workspace.get_json()
+        print(JSON)
+        #Save workspace in .pdbws extension
+        path = self.workspace.wpath.strip()
+        name = self.workspace.name.strip()
+        _file = open("{}/{}.pdbws".format(path, name), "w+")
+        _file.write(json.dumps(JSON, indent=4))
+        _file.close()
 
     def load_workspace(self, filename):
         '''
@@ -55,15 +54,11 @@ class Loader():
         Yields:
             Name of the loaded workspace
         '''
-        try:
-            print("[+] Opening Workspace from {}".format(filename))
-            with open(filename) as _file:
-                data = json.loads(_file.read())
-            self.workspace = workspace.Workspace(JSON=data)
-            return self.workspace.JSON
-        except Exception as e:
-            print("Loading the workspace resulted in an error. Traceback: ")
-            print(str(e))
+        print("[+] Opening Workspace from {}".format(filename))
+        with open(filename) as _file:
+            data = json.loads(_file.read())
+        self.workspace = workspace.Workspace(JSON=data)
+        return self.workspace.JSON
 
     def new_workspace(self, ws_name, ws_created, ws_edited):
         '''
@@ -77,21 +72,16 @@ class Loader():
             Path to newly created workspace file
         '''
         #store workspace reference
-        try:
-            self.workspace = workspace.Workspace(ws_name.strip(), None)
-            self.workspace.start_date = ws_created
-            self.workspace.edit_date = ws_edited
-            self.workspace.wpath = "{}/{}".format(os.getcwd().strip(), self.workspace.name.strip())
-            #Create directories needed by thhe workspace
-            os.mkdir(self.workspace.name.strip())
-            os.mkdir("{}/Lua".format(self.workspace.wpath))
-            #Save the workspace
-            self.save_workspace()
-            return self.workspace.wpath
-        except Exception as e:
-            print("Creating the workspace resulted in an error. Traceback: ")
-            print(str(e))
-
+        self.workspace = workspace.Workspace(ws_name.strip(), None)
+        self.workspace.start_date = ws_created
+        self.workspace.edit_date = ws_edited
+        self.workspace.wpath = "{}/{}".format(os.getcwd().strip(), self.workspace.name.strip())
+        #Create directories needed by thhe workspace
+        os.mkdir(self.workspace.name.strip())
+        os.mkdir("{}/Lua".format(self.workspace.wpath))
+        #Save the workspace
+        self.save_workspace()
+        return self.workspace.wpath
 
     def close_workspace(self):
         '''
@@ -151,16 +141,13 @@ class Loader():
         Args:
             filename : path to file of project to be imported
         '''
-        try:
-            with open(filename) as _file:
-                data = json.loads(_file.read())
-            #Create .pdbproj file in current workspace, add to project and save
-            proj = project.Project(JSON=data)
-            proj.path = "{}/{}.pdbproj".format(self.workspace.wpath, proj.name)
-            self.workspace.add_project_to_workspace(proj.path)
-            self.save_project(proj.path, proj)
-        except Exception as e:
-            print("There is an issue importing the project")
+        with open(filename) as _file:
+            data = json.loads(_file.read())
+        #Create .pdbproj file in current workspace, add to project and save
+        proj = project.Project(JSON=data)
+        proj.path = "{}/{}.pdbproj".format(self.workspace.wpath, proj.name)
+        self.workspace.add_project_to_workspace(proj.path)
+        self.save_project(proj.path, proj)
 
     def save_dissector_attributes(self, fields, workspace, p_name):
         '''
@@ -219,3 +206,13 @@ class Loader():
         generator = dissector.DissectorGenerator()
         generator.parse_json(p_json)
         generator.add_headers(ws_json['path'], p_json)
+        self.open_path(ws_json['path'])
+
+    def open_path(self, lua_path):
+        lua_path = lua_path + "/Lua"
+        if platform.system() == "Windows":
+            os.startfile(path)
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", lua_path])
+        else:
+            subprocess.Popen(["xdg-open", lua_path])

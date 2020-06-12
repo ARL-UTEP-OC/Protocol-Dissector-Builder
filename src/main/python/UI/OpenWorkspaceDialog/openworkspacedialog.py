@@ -53,6 +53,6 @@ class Ui_OpenWorkspaceDialog(object):
 
     def retranslateUi(self, OpenWorkspaceDialog):
         _translate = QtCore.QCoreApplication.translate
-        self.label.setText(_translate("OpenWorkspaceDialog", "Create a New Workspace / Open New Workspace"))
+        self.label.setText(_translate("OpenWorkspaceDialog", "Select directory of workspace to open"))
         self.browseButton.setText(_translate("OpenWorkspaceDialog", "Browse"))
         self.addButton.setStandardButtons(QtWidgets.QDialogButtonBox.Ok)

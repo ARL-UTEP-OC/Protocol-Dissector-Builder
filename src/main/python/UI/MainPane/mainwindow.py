@@ -320,6 +320,7 @@ class UiMainWindow(object):
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
             #send signal to pyro
             self.closeWorkspace()
+        self.packetpreview_ui.disableDissectButton()
 
 
     def export_lua_dialog(self):
@@ -482,6 +483,8 @@ class UiMainWindow(object):
                 #send signal to pyro
                 self.pyro_proxy.import_project(opUi.filename)
                 self.loadWorkspace()
+                self.packetpreview_ui.enableDissectButton()
+
         except Exception as e:
             print("There was an error importing the project. ")
             logging.info("There was an error importing the project. ")
@@ -525,6 +528,7 @@ class UiMainWindow(object):
         self.dba_ui.clear_widgets_from_canvass()
         self.dba_ui.restore_widgets_to_scene(dissector_json)
         logging.info(f"Project: {self.selected_project} opened")
+        self.packetpreview_ui.enableDissectButton()
 
     def save_all_dissector(self):
         '''

@@ -109,8 +109,11 @@ class Ui_PackagePreview(object):
                     branch1.appendRow(ProtocolToAdd)
                 self.model.appendRow([branch1])
         p.terminate()
-        logging.info("File Opened")
-        self.pushButton2.setText("Dissect")
+        if(self.name[0]):
+            logging.info("File Opened")
+            self.pushButton2.setText("Dissect")
+        else:
+            self.label_3.setText("Status: Operation Cancelled.")
 
 
     def dissect(self):

@@ -46,6 +46,7 @@ class Ui_PackagePreview(object):
         self.pushButton.setGeometry(QtCore.QRect(0, 0, 83, 25))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.openFile)
+        self.pushButton.setEnabled(False)
 
         self.label_3 = QtWidgets.QLabel(PackagePreview)
         self.label_3.setGeometry(QtCore.QRect(300, 30, 500, 17))
@@ -55,6 +56,8 @@ class Ui_PackagePreview(object):
         self.pushButton2.setGeometry(QtCore.QRect(100, 0, 83, 25))
         self.pushButton2.setObjectName("pushButton2")
         self.pushButton2.clicked.connect(self.dissect)
+        self.pushButton2.setEnabled(False)
+
 
         # self.label = QtWidgets.QLabel(PackagePreview)
         # self.label.setGeometry(QtCore.QRect(530, 30, 131, 17))
@@ -107,14 +110,21 @@ class Ui_PackagePreview(object):
                     branch1.appendRow(ProtocolToAdd)
                 self.model.appendRow([branch1])
         p.terminate()
-        logging.info("File Opened")
-        self.pushButton2.setText("Dissect")
+        if(self.name[0]):
+            logging.info("File Opened")
+            self.pushButton2.setText("Dissect")
+        else:
+            self.label_3.setText("Status: Operation Cancelled.")
 
 
     def dissect(self):
         logging.info("Dissecting")
-        p = subprocess.Popen(['python', f'{os.getcwd()}/demo.py'])
+        if(not hasattr(self,'name')):
+            print("No file to dissect")
+            logging.info("No file to dissect")
+            return
         try:
+            p = subprocess.Popen(['python', f'{os.getcwd()}/demo.py'])
             if(self.name[0] and ".pcap" in self.name[0] ):
                 self.model.removeRows(0,self.model.rowCount())
                 self.pushButton2.setText("ReDissect")
@@ -175,11 +185,22 @@ class Ui_PackagePreview(object):
                     self.model.appendRow([branch2,numberCol])
                     numberCol.setData(QBrush(color), QtCore.Qt.BackgroundRole)
                 self.label_3.setText("Status: Package has been dissected.")
+                logging.info("Dissected")
         except:
                 pass
         p.terminate()
-        logging.info("Dissected")
 
+    def enableDissectButton(self):
+        self.pushButton2.setEnabled(True)
+
+    def disableDissectButton(self):
+        self.pushButton2.setEnabled(False)
+
+    def enableFileButton(self):
+        self.pushButton.setEnabled(True)
+
+    def disableFileButton(self):
+        self.pushButton.setEnabled(False)
 
     def retranslateUi(self, PackagePreview):
         _translate = QtCore.QCoreApplication.translate

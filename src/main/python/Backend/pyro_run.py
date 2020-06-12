@@ -97,6 +97,7 @@ class Pyro_Run():
         '''
         return self.loader.new_project(name,author,desc,created,edited,protocol,change_protocol,src_port,dst_port)
 
+
     def export_lua_script(self,workspace,project):
         '''
         Export a lua script for the current project. calls Loader -> export_lua_script
@@ -143,7 +144,12 @@ class Pyro_Run():
             self.child = winpexpect.winspawn("python " + '"' + projectPath + '"')
             print("created - w " )
         else:
-            self.child = pexpect.spawn("python3.6 " + projectPath,encoding='utf-8')
+            try:
+                self.child = pexpect.spawn("python3.6 " + projectPath,encoding='utf-8')
+            except:
+                print("Python 3.6 was not found, please fix path or install python 3.6")
+                self.child = pexpect.spawn("python " + projectPath,encoding='utf-8')
+
             print("created")
         self.child.expect("loop")
         print("Creating")

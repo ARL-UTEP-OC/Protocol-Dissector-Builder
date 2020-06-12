@@ -2,9 +2,12 @@
 Authors:
     Daniel Ornelas
     Ernesto Vazquez
+    Fernando Martinez
 """
 import os
 import json
+import subprocess
+import platform
 import sys
 sys.path.insert(1, "./")
 sys.path.insert(1, "../../")
@@ -203,3 +206,13 @@ class Loader():
         generator = dissector.DissectorGenerator()
         generator.parse_json(p_json)
         generator.add_headers(ws_json['path'], p_json)
+        self.open_path(ws_json['path'])
+
+    def open_path(self, lua_path):
+        lua_path = lua_path + "/Lua"
+        if platform.system() == "Windows":
+            os.startfile(path)
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", lua_path])
+        else:
+            subprocess.Popen(["xdg-open", lua_path])

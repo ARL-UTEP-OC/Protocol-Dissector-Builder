@@ -20,7 +20,7 @@ if __name__ == "__main__":
     '''
     pyro = pyro_run.Pyro_Run()
     #pyro needs to start in a separate thread
-    pyro_thread = threading.Thread(target=pyro.main)
+    pyro_thread = threading.Thread(target=pyro.main,daemon=True)
     pyro_thread.start()
     #sleep to allow pyro namespace to register
     time.sleep(10)
@@ -33,4 +33,3 @@ if __name__ == "__main__":
     mainDialog.show()
     exit_code = appctxt.app.exec_()
     sys.exit(exit_code)
-    

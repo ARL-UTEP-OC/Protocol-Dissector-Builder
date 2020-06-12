@@ -454,7 +454,7 @@ test_json = {
             "next_field": "END"
         }
     },
-    "path": "/Users/danielornelas/projects/protocol-dissector-builder/Protocol-Dissector-Builder/SAMPLE/MongoDB.pdbproj"
+    "path": "/root/Desktop/Research2020/SAMPLE/MongoDB.pdbproj"
 }
 
 test_json2 = {}
@@ -912,7 +912,7 @@ test_json3 = {
             "next_field": "END"
         }
     },
-    "path": "/Users/danielornelas/projects/protocol-dissector-builder/Protocol-Dissector-Builder/SAMPLE/MongoDB.pdbproj"
+    "path": "/root/Desktop/Research2020/SAMPLE/MongoDB.pdbproj"
 }
 
 test_json4 = {
@@ -1362,7 +1362,7 @@ test_json4 = {
             "next_field": "END"
         }
     },
-    "path": "/Users/danielornelas/projects/protocol-dissector-builder/Protocol-Dissector-Builder/SAMPLE/MongoDB.pdbproj"
+    "path": "/root/Desktop/Research2020/SAMPLE/MongoDB.pdbproj"
 }
 
 def test_parse_json_correct_json():
@@ -1379,7 +1379,7 @@ def test_parse_json_empty_json():
     with pytest.raises(Exception) as e_info:
         diss = DissectorGenerator()
         diss.parse_json(test_json2)
-        
+
 
 def test_parse_json_missing_json():
     with pytest.raises(Exception) as e_info:
@@ -1398,4 +1398,3 @@ def test_parse_json_missing_attributes_json():
         diss.parse_json(test_json4)
 
 #def test
-    

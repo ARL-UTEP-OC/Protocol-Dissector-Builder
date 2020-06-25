@@ -16,6 +16,7 @@ import datetime
 sys.path.insert(1, "./")
 sys.path.insert(1, "../../")
 from UI.OpenWorkspaceDialog import openworkspacedialog
+from UI.OpenWorkspaceDialog import confirmworkspacedialog
 
 from UI.WorkspaceConfigDialog import workspaceconfigwindow
 from UI.CloseWorkspaceDialog import closeworkspacewindow
@@ -239,6 +240,16 @@ class UiMainWindow(object):
             if ws_name != "" and ws_name != None:
                 self.workspaceLabel.setText("Workspace: " + ws_name)
                 logging.info(f"Workspace: {ws_name} opened")
+
+                #This here prompts the confirm window that a workspace has been opened.
+                #We use a Widget class here stored in OpenWorkspaceDialog/confirmworkspacedialog.property.py
+                #This reasoning is that we may want to add to this prompt. Ie, to show the path or otherwise any other nice to have feature.
+                #This is why it currently is stored this way vs a method.
+                Prompt = QtWidgets.QDialog()
+                okUi= confirmworkspacedialog.Ui_ConfirmWorkspaceDialog()
+                okUi.setupUi(Prompt)
+                Prompt.exec_()
+
             else:
                 logging.info(f"Workspace was not loaded correctly")
 
@@ -381,6 +392,8 @@ class UiMainWindow(object):
                     #save file, change workspace label, call loadworkspace
                     self.workspace_file ="{}/{}.pdbws".format(self.pyro_proxy.new_workspace(wsName,wsStartDate,wsEditDate),wsName.strip())
                     self.workspaceLabel.setText("Workspace: " + wsName)
+
+
                     self.loadWorkspace()
 
     #PROJECT FUNCTIONS

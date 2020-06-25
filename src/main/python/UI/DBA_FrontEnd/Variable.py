@@ -16,7 +16,7 @@ class Variable(QWidget):
         self.initUI()
 
     def initUI(self):
-        
+
         self.setGeometry(20, 20, 278, 100)
         self.nameLineEdit = QLineEdit()
         name_line_exp_validator = QRegExp("[a-z0-9_]+\S?[A-za-z0-9_]+")
@@ -54,13 +54,14 @@ class Variable(QWidget):
         self.okButton = QPushButton('OK')
         self.okButton.clicked.connect(self.clickOKMethod)
         self.widget_layout.addWidget(self.okButton)
+        self.setStyleSheet("color:red")
 
     def getVariableNumber(self):
         return self.variableNumber
-        
+
     def setVariableNumber(self, number):
         self.variableNumber = number
-    
+
     def setName(self, name):
         self.name = name
         self.nameLineEdit.setText(name)
@@ -81,6 +82,8 @@ class Variable(QWidget):
     def saveMethod(self):
         variable_properties = dict(
             {'Scope': self.scope_choice.currentText(), 'Data Type': self.data_type_combo.currentText(), 'Name': self.nameLineEdit.text(), 'Value': self.valueLineEdit.text()})
+        self.setStyleSheet("color:black")
+
         return variable_properties
     def setButton(self, toolButton):
         self.toolButton = toolButton
@@ -108,7 +111,7 @@ class Variable(QWidget):
                     self.scene.variableList[i] = self.nameLineEdit.text()
                     self.name = self.nameLineEdit.text()
                     break
-                i = i + 1    
+                i = i + 1
             self.toolButton.setText(self.nameLineEdit.text())
             self.toolButton.menu().hide()
 

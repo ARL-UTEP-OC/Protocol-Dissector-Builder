@@ -20,6 +20,7 @@ class Float_Field(QWidget):
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.table)
         self.setLayout(self.layout)
+        self.setStyleSheet("color:red")
 
         self.show()
     def draw_field_table(self):
@@ -109,9 +110,9 @@ class Float_Field(QWidget):
             dict.update({'Required': 'true'})
         else:
             dict.update({'Required': 'false'})
+        self.setStyleSheet("color:black")
 
 if __name__ == '__main__':
     app = QApplication([])
     test = Float_Field()
     sys.exit(app.exec_())
-

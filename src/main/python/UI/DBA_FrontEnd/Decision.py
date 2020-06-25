@@ -39,6 +39,7 @@ class Decision(QWidget):
         self.addButton = QPushButton("+")
         self.layout.addWidget(self.addButton,2,0)
         self.addButton.clicked.connect(self.clickMethod)
+        self.setStyleSheet("color:red")
 
         self.setLayout(self.layout)
 
@@ -58,6 +59,7 @@ class Decision(QWidget):
                 index = conditionWidget.findText(value)
                 conditionWidget.setCurrentIndex(index)
             colNum += 1
+        self.setStyleSheet("color:black")
 
 
     def clickMethod(self):
@@ -73,6 +75,7 @@ class Decision(QWidget):
         self.col+=1
         self.layout.removeWidget(self.if_label)
         self.layout.addWidget(self.if_label, 0, self.col//2)
+        self.setStyleSheet("color:red")
 
         self.parent().resize(self.layout.sizeHint()) #Added this for menu size change
 
@@ -86,6 +89,8 @@ class Decision(QWidget):
                 decision_properties.append(loopWidget.text())
             if(isinstance(loopWidget, QComboBox)):
                 decision_properties.append(loopWidget.currentText())
+        self.setStyleSheet("color:black")
+
         return decision_properties
 
 

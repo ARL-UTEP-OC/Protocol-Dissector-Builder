@@ -16,14 +16,14 @@ class For_Loop(QWidget):
         self.setWindowTitle("for Loop")
         self.layout = QGridLayout()
         self.col = 0
-        
+
         self.for_label = QLabel()
         self.for_label.setText(" for")
         self.layout.addWidget(self.for_label, 0, 2, Qt.AlignCenter)
 
         self.layout.addWidget(QLineEdit(), 1, self.col)
         self.col+=1
-        
+
 
         exp12_separator = QLabel(";")
         self.layout.addWidget(exp12_separator)
@@ -38,6 +38,7 @@ class For_Loop(QWidget):
 
         self.layout.addWidget(QLineEdit(), 1, self.col)
         self.col += 1
+        self.setStyleSheet("color:red")
 
         self.setLayout(self.layout)
 
@@ -67,8 +68,10 @@ class For_Loop(QWidget):
         exp2 = self.layout.itemAtPosition(1,2).widget().text()
         exp3 = self.layout.itemAtPosition(1,4).widget().text()
         for_properties = {'exp1': exp1, 'exp2':exp2, 'exp3':exp3}
+        self.setStyleSheet("color:black")
+
         return for_properties
-        
+
 if __name__ == '__main__':
     app = QApplication([])
     test = For_Loop()

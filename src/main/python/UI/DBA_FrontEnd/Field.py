@@ -21,9 +21,12 @@ class FieldOKDialog(QDialog):
         self.layout.addWidget(self.okButton)
         self.setLayout(self.layout)
         self.layout.setAlignment(Qt.AlignCenter)
-        
+        self.setStyleSheet("color:red")
+
 
     def ok_button_clicked(self):
+        self.setStyleSheet("color:black")
+
         self.close()
 
 class Field(QWidget):
@@ -45,6 +48,8 @@ class Field(QWidget):
         self.okButton = QPushButton("OK")
         self.okButton.clicked.connect(self.clickOKMethod)
         self.layout.addWidget(self.okButton)
+        self.setStyleSheet("color:red")
+
         self.setLayout(self.layout)
 
     def draw_field_table(self):
@@ -111,7 +116,7 @@ class Field(QWidget):
         var_choices = ["BYTES", "BITS", 'Variable', 'Field']
         for choice in var_choices:
             var_choice.addItem(choice)
-        var_choice.activated[str].connect(self.changeVarSizeEdit) 
+        var_choice.activated[str].connect(self.changeVarSizeEdit)
         var_size_line = QLineEdit()
         var_size_line_exp_validator = QRegExp("[0-9]+")
         var_size_line_validator = QRegExpValidator(var_size_line_exp_validator)
@@ -149,9 +154,9 @@ class Field(QWidget):
             j += 1
         self.table.setColumnWidth(1, 138)
         self.table.resizeRowsToContents()
-    
+
     def changeVarSizeEdit(self, text):
-        self.cur_txt = text 
+        self.cur_txt = text
         if self.cur_txt == 'Variable' or self.cur_txt == 'Field':
             self.customSize = 1
             #var_size_row_layout = QHBoxLayout()
@@ -166,8 +171,8 @@ class Field(QWidget):
             #     autoList = self.get_data("Field")
             # completer = QCompleter(autoList)
             # objectName.setCompleter(completer)
-        
-            
+
+
             """objectType = QComboBox()
             objectTypes = ['Variable', 'Field']
             for ob_type in objectTypes:
@@ -180,7 +185,7 @@ class Field(QWidget):
             self.table.setCellWidget(7, 1, objectName)
             #self.table.resizeRowsToContents()
             #self.parent().resize(self.layout.sizeHint())
-            
+
     def clickOKMethod(self):
         if self.table.cellWidget(0, 1).text() == "":
             text = "No name declared. Please declare a name"
@@ -214,17 +219,18 @@ class Field(QWidget):
                 dialog = FieldOKDialog(text)
                 dialog.exec()
                 return
-        
+
         i = 0
         while(i < len(self.scene.proxyDefinedFieldList)):
             if(self.name == str(self.scene.proxyDefinedFieldList[i])):
                 self.scene.proxyDefinedFieldList[i] = self.table.cellWidget(0, 1).text()
                 self.name = self.table.cellWidget(0, 1).text()
                 break
-            i = i + 1        
+            i = i + 1
         self.toolButton.setText(self.table.cellWidget(0, 1).text())
         self.toolButton.menu().hide()
-    
+        self.setStyleSheet("color:black")
+
     def setName(self, name):
         self.name = name
         self.table.cellWidget(0,1).setText(name)
@@ -297,8 +303,8 @@ class Field(QWidget):
                     if variable.widget().menu().actions()[0].defaultWidget().nameLineEdit.text() == self.table.cellWidget(7,1).children()[1].text():
                         field_properties.update(variable.widget().menu().actions()[0].defaultWidget().size())
                         field_properties.update({'ID Value': self.table.cellWidget(8,1).text()})"""
-        
-        
+
+
         if self.table.cellWidget(9,1).children()[1].isChecked():
             field_properties.update({'Required': 'true'})
         else:
@@ -309,7 +315,7 @@ class Field(QWidget):
             field_properties.update({'LE': 'false'})
 
         return field_properties
-    
+
     def setButton(self, toolButton):
         self.toolButton = toolButton
     def getIsCopy(self):
@@ -325,9 +331,9 @@ class Field(QWidget):
         else:
             return self.scene.proxyDefinedFieldList
     def size(self):
-    
+
         size = dict({'Var Size': {'editText': self.table.cellWidget(7,1).children()[1].text(), 'combobox': self.table.cellWidget(7,1).children()[2].currentText()}})
-            
+
         return size
 if __name__ == '__main__':
     app = QApplication([])

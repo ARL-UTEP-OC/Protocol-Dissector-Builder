@@ -16,7 +16,7 @@ class While_Loop(QWidget):
         self.setWindowTitle("while Loop")
         self.layout = QGridLayout()
         self.col = 0
-        
+
         self.while_label = QLabel()
         self.while_label.setText(" while")
         self.layout.addWidget(self.while_label, 0, 0)
@@ -39,6 +39,7 @@ class While_Loop(QWidget):
         self.addButton.clicked.connect(self.clickMethod)
 
         self.setLayout(self.layout)
+        self.setStyleSheet("color:red")
 
     def getName(self):
         return self.name
@@ -82,8 +83,10 @@ class While_Loop(QWidget):
                 while_properties.append(loopWidget.text())
             if(isinstance(loopWidget, QComboBox)):
                 while_properties.append(loopWidget.currentText())
-        return while_properties
+        self.setStyleSheet("color:red")
         
+        return while_properties
+
 if __name__ == '__main__':
     app = QApplication([])
     test = While_Loop()
